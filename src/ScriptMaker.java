@@ -191,7 +191,7 @@ public class ScriptMaker {
 //			if(!first){
 			line = HOME_DIR + "padres/demo/bin/stockquote/startSQsubscriber.sh -i"
 				+ " Client" + host.getId()
-				+ " -s \"[class,eq,'STOCK'],[symbol,eq,'" + symbol + "'],[AGR,eq,'count'],[PAR,eq,volume],[PRD,eq,'" + number + "'],[NTF,eq,'1']\""
+				+ " -s \"[class,eq,'STOCK'],[symbol,eq,'" + symbol + "'],[AGR,eq,'count'],[PAR,eq,volume],[PRD,eq,'" + number + "'],[NTF,eq,'2']\""
 				+ " -b " + CONN + "://"
 				+ host.getIpAddr() + ":" + PORT
 				+ "/Broker" + host.getId()

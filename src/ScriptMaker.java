@@ -4,6 +4,9 @@ import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Properties;
@@ -30,6 +33,7 @@ public class ScriptMaker {
 	private static int symbolIndex;
 	private static String outputDir;
 	private static int counter = 1;
+ 
 	
 	private static Properties loadConfig(String configFile) {
 		// Load file into a properties object first
@@ -51,7 +55,7 @@ public class ScriptMaker {
 		return configProps;
 	}
 	
-	private static void generateScript(String hostFile) {
+	private static void generateScript(String hostFile , String NP, String  NS, String  OP) {
 
 		if (!FileOperation.exists(hostFile)) {
 			System.out.println("host address file " + hostFile + " not found.");
@@ -124,7 +128,7 @@ public class ScriptMaker {
 				first = true;
 			}
 			
-			outputNormal(host, coreHost, pubPerNode, subPerNode, true , (((j++) % 4) + 1));
+			outputNormal(host, coreHost, pubPerNode, subPerNode, true , (((j++) % 4) + 1), NP, NS, OP);
 			//outputNormal(host, coreHost, pubPerNode, subPerNode, true ,  1);
 			hostOrder += host.getHostName() + "\n";
 			i = (i + 1) % fanout;
@@ -157,7 +161,7 @@ public class ScriptMaker {
 	}
 
 	private static void outputNormal(Host host, Host coreHost, int pubPerNode, 
-		int subPerNode, boolean publisher, int number) {
+		int subPerNode, boolean publisher, int number, String NP, String  NS, String  OP) {
 		try {
 			FileWriter fstream = new FileWriter(SCRIPT_DIR + host.getHostName());
 			BufferedWriter out = new BufferedWriter(fstream);
@@ -176,8 +180,14 @@ public class ScriptMaker {
 			out.write("sleep $1\n");
 			
 			if(publisher){
+				
+				String localNP = "50";
+				if(NP != null)
+					localNP = NP;
+				
 				line = HOME_DIR + "padres/demo/bin/stockquote/startSQpublisher.sh -i"
 					+ " Pub" + host.getId()
+					+ " -NP " + localNP
 					+ " -s " + symbol
 					+ " -r 60 -d " + DELAY
 					+ " -b " + CONN + "://"
@@ -188,10 +198,20 @@ public class ScriptMaker {
 				out.write(line);
 			out.write(" &\n sleep $1\n");
 			}
+			
+			String localNS = "50";
+			if(NS != null)
+				localNS = NS;
+			
+			String localOP = "count";
+			if(OP != null)
+				localOP = OP;
+			
 //			if(!first){
 			line = HOME_DIR + "padres/demo/bin/stockquote/startSQsubscriber.sh -i"
 				+ " Client" + host.getId()
-				+ " -s \"[class,eq,'STOCK'],[symbol,eq,'" + symbol + "'],[AGR,eq,'count'],[PAR,eq,volume],[PRD,eq,'" + number + "'],[NTF,eq,'2']\""
+				+ " -NS " + localNS
+				+ " -s \"[class,eq,'STOCK'],[symbol,eq,'" + symbol + "'],[AGR,eq,'"+localOP+"'],[PAR,eq,volume],[PRD,eq,'" + number + "'],[NTF,eq,'1']\""
 				+ " -b " + CONN + "://"
 				+ host.getIpAddr() + ":" + PORT
 				+ "/Broker" + host.getId()
@@ -276,8 +296,35 @@ public class ScriptMaker {
 		
 		configProps = loadConfig(DEFAULT_CONFIG_FILE);
 		
-		if(configProps != null)
-			generateScript(args[0]);
+		if(configProps != null) {
+			
+			
+			final List<String> list =  new ArrayList<String>();
+			//defalut value of replicaiton
+			String NP = null;
+			String NS = null;
+			String OP = null;
+			Collections.addAll(list, args); 
+			Iterator itr = list.iterator();
+
+			while(itr.hasNext()) {
+				String curr = (String) itr.next();
+				if( curr.equals("-NP")){
+					NP = (String) itr.next();
+				}
+				
+				if( curr.equals("-NS")){
+					NS = (String) itr.next();
+				}
+				
+				if( curr.equals("-OP")){
+					OP =  (String) itr.next();
+				}
+			}
+			
+			generateScript(args[0], NP, NS, OP);
+			
+		}
 		else {
 			
 			System.exit(1);

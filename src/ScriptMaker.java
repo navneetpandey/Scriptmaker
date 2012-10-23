@@ -218,6 +218,18 @@ public class ScriptMaker {
 				+ " > " + outputDir + "Sub" + host.getId() + ".log &\n";
 			
 			out.write(line);
+			
+			if(number%4 == 1) {
+				line = HOME_DIR + "padres/demo/bin/stockquote/startSQsubscriber.sh -i"
+						+ " Client" + host.getId()
+						+ " -NS " + localNS
+						+ " -s \"[class,eq,'STOCK'],[symbol,eq,'" + symbol + "'],[AGR,eq,'"+localOP+"'],[PAR,eq,volume],[PRD,eq,'" + number + "'],[NTF,eq,'1']\""
+						+ " -b " + CONN + "://"
+						+ host.getIpAddr() + ":" + PORT
+						+ "/Broker" + host.getId()
+						+ " > " + outputDir + "Sub" + host.getId() + ".log &\n";
+			}
+			
 //			}			
 
 			out.close();

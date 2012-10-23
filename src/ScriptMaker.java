@@ -223,7 +223,7 @@ public class ScriptMaker {
 				line = HOME_DIR + "padres/demo/bin/stockquote/startSQsubscriber.sh -i"
 						+ " Client" + host.getId()
 						+ " -NS " + localNS
-						+ " -s \"[class,eq,'STOCK'],[symbol,eq,'" + symbol + "'],[AGR,eq,'"+localOP+"'],[PAR,eq,volume],[PRD,eq,'" + number + "'],[NTF,eq,'1']\""
+						+ " -s \"[class,eq,'STOCK'],[symbol,eq,'" + symbol + "']\""
 						+ " -b " + CONN + "://"
 						+ host.getIpAddr() + ":" + PORT
 						+ "/Broker" + host.getId()

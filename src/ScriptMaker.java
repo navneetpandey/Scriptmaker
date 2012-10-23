@@ -219,7 +219,7 @@ public class ScriptMaker {
 			
 			out.write(line);
 			
-			if(number%4 == 1) {
+			/*if(number%4 == 1) {
 				line = HOME_DIR + "padres/demo/bin/stockquote/startSQsubscriber.sh -i"
 						+ " Client" + host.getId()
 						+ " -NS " + localNS
@@ -229,7 +229,7 @@ public class ScriptMaker {
 						+ "/Broker" + host.getId()
 						+ " > " + outputDir + "Sub" + host.getId() + ".log &\n";
 			}
-			out.write(line);
+			out.write(line); */
 //			}			
 
 			out.close();

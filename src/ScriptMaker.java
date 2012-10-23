@@ -229,7 +229,7 @@ public class ScriptMaker {
 						+ "/Broker" + host.getId()
 						+ " > " + outputDir + "Sub" + host.getId() + ".log &\n";
 			}
-			
+			out.write(line);
 //			}			
 
 			out.close();

@@ -21,7 +21,7 @@ public class ScriptMaker {
 	private static boolean first = true;
 	private static final String HOME_DIR = "/ifi/asgard/a02/navneet/aggre/";
 	private static final String SCRIPT_DIR = HOME_DIR + "scripts/";
-	private static final String DEFAULT_CONFIG_FILE = "etc/scriptmaker.properties";
+	private static final String DEFAULT_CONFIG_FILE = "scriptmaker.properties";
 	private static final String PORT = "1099";
 	private static final int MEM_MIN = 256;
 	private static final int MEM_MAX = 512;
